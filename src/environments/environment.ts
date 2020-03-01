@@ -6,6 +6,31 @@ export const environment = {
   production: false
 };
 
+export const firebaseConfig = {
+  apiKey: "AIzaSyCC6Je29faaukk2SOVIAblKSj8SJZogiMY",
+  authDomain: "notasapp-bf9e5.firebaseapp.com",
+  databaseURL: "https://notasapp-bf9e5.firebaseio.com",
+  projectId: "notasapp-bf9e5",
+  storageBucket: "notasapp-bf9e5.appspot.com",
+  messagingSenderId: "932510974702",
+  appId: "1:932510974702:web:8fbf1d6cdc2af8cdefa9ff"
+
+}
+
+export const snapToArray = (snap:firebase.database.DataSnapshot) => {
+  let returnedArray = [];
+
+  snap.forEach(element => {
+    let item = element.val();
+    item.key = element.key;
+
+    returnedArray.push(item);
+    
+  });
+  return returnedArray;
+
+}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
