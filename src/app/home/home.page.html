@@ -1,13 +1,13 @@
-<ion-header [translucent]="true">
+<!-- <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      NotasApp
     </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">              
+  <ion-header >              
     <ion-toolbar>      
       <ion-buttons collapse="true" slot="end">
         <ion-button color="danger">Salir</ion-button>
@@ -15,13 +15,13 @@
       <ion-title size="large">NotasApp</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-      <ion-searchbar placeHolder="Buscar" inputMode="search" animated (ionChange)="filterItems(txtSearch)" [(ngModel)] = "txtSearch" ></ion-searchbar>
+      <ion-searchbar placeHolder="Buscar" inputMode="search" animated (ionChange)="filterItem(txtSearch)" [(ngModel)] = "txtSearch" ></ion-searchbar>
     </ion-toolbar>
   </ion-header>
 
   <div id="container" *ngIf="notas">
     <!-- List of Sliding Items -->
-    <ion-list *ngFor="let nota of notas">
+    <ion-list *ngFor="let nota of filteredItems">
       <ion-item-sliding >
         <ion-item type="button" target="_top" detail="false" button (click)="editItem(nota)">
           <ion-label>
