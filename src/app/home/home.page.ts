@@ -10,7 +10,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class HomePage {
 
-  fullList:any[];
+  filteredItems:any[];
   notas:any[];
   lastId = "";
   canceDel= false;
@@ -21,9 +21,10 @@ export class HomePage {
     this.ref.on("value", snap => {
       this.notas = snapToArray(snap);
       this.lastId = this.notas.length > 0 ? this.notas[this.notas.length - 1].key :false ;
-      this.fullList = this.notas;
-
+      this.assignCopy();//when you fetch collection from server.
     });
+
+
   }
 
   async presentToast(msg:string) {
@@ -35,31 +36,60 @@ export class HomePage {
   }
 
   async presentToastWithOptions(key:string) {
-    const toast = await this.toastController.create({
-      message: 'Nota sera eliminada...',
-      duration: 2000,
-      position: 'top',
-      buttons: [
-         {
-          text: 'Deshacer',
-          role: 'cancel',
-          handler: () =>{
-            this.canceDel = true;
+    // const toast = await this.toastController.create({
+    //   message: 'Nota sera eliminada...',
+    //   duration: 2000,
+    //   position: 'top',
+    //   buttons: [
+    //      {
+    //       text: 'Deshacer',
+    //       role: 'cancel',
+    //       handler: () =>{
+    //         this.canceDel = true;
 
+    //       }
+    //     }
+    //   ]
+    // });
+    // toast.present();
+    // setTimeout(()=>{ this.canceDel? false: this.delItem(key)}, 2500);
+    const alert = await this.alertController.create({
+      header: 'Advertencia!',
+      message: 'Message <strong>text</strong>!!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log(blah);
+          }
+        }, {
+          text: 'Okay',
+          handler: (bb) => {
+            console.log(key);
           }
         }
       ]
     });
-    toast.present();
-    setTimeout(()=>{ this.canceDel? false: this.delItem(key)}, 2500);
+
+    await alert.present();
   }
 
-  filterItems(textInp:string){
-    console.log(textInp);
-    let filter = this.notas.filter(el => el.title.toLowerCase().indexOf(textInp.toLowerCase()) > -1 || el.description.toLowerCase().indexOf(textInp.toLowerCase()) > -1);
-    this.notas = filter.length == 0? this.fullList : filter;
+  assignCopy(){
+    this.filteredItems = Object.assign([], this.notas);
+ }
 
-  }
+ filterItem(value:string){
+  if(!value){
+      this.assignCopy();
+  } // when nothing has typed
+  this.filteredItems = Object.assign([], this.notas).filter(
+     item => item.title.toLowerCase().indexOf(value.toLowerCase()) > -1 || item.description.toLowerCase().indexOf(value.toLowerCase()) > -1
+  )
+}
+
+
 
  async addItem() {
     const alert = await this.alertController.create({
@@ -72,7 +102,7 @@ export class HomePage {
         },
         {
           name: 'description',
-          type: 'text',
+          type: 'textarea',
           placeholder: 'Descripción'
         }
       ],
@@ -113,7 +143,7 @@ export class HomePage {
         },
         {
           name: 'description',
-          type: 'text',
+          type: 'textarea',
           value: nota.description,
           placeholder: 'Descripción'
         }
