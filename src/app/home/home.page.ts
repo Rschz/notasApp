@@ -12,7 +12,7 @@ export class HomePage {
 
   filteredItems:any[];
   notas:any[];
-  lastId = "";
+  lastId = 0;
   canceDel= false;
   inpSearch:string;
   ref = firebase.database().ref("notas");
@@ -58,16 +58,13 @@ export class HomePage {
       message: 'Message <strong>text</strong>!!!',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log(blah);
-          }
+          cssClass: 'secondary'
         }, {
-          text: 'Okay',
-          handler: (bb) => {
-            console.log(key);
+          text: 'Aceptar',
+          handler: () => {
+            this.delItem(key);
           }
         }
       ]
@@ -114,7 +111,8 @@ export class HomePage {
           text: 'Ok',
           handler: data => {
             if (data.title!==undefined && data.title.length > 0) {
-              this.ref.child(this.lastId +1).set({id: this.lastId +1, title:data.title,description:data.description});
+              let insertId = +this.lastId + +1;
+              this.ref.child(insertId.toString()).set({id: insertId, title:data.title,description:data.description});
               this.presentToast("Nota agregada!");
             }
           }
